@@ -1,0 +1,509 @@
+{
+    "openapi": "3.0.3",
+    "info": {
+        "title": "Task Manager API",
+        "description": "This is a documentation about task manager api",
+        "termsOfService": "http://swagger.io/terms/",
+        "contact": {
+            "name":"Roque Lopez",
+            "email": "roquel371@gmail.com"
+        },
+        "version": "1.0.0"
+    },
+    "externalDocs": {
+        "description": "Find out more about Swagger",
+        "url": "http://swagger.io"
+    },
+    "servers": [
+      {
+        "url": "http://localhost:3000/api/"
+      }
+    ],
+    "tags": [
+      {
+        "name": "tasks",
+        "description": "Everything about your Tasks",
+        "externalDocs": {
+          "description": "Find out more",
+          "url": "http://swagger.io"
+        }
+      }
+    ],
+    "paths": {
+        "/tasks": {
+            "get": {
+                "tags":["tasks"],
+                "summary":"Get a task list",
+                "description":"Get all task",
+                "operationId":"getTasks",
+                "parameters":[
+                    {
+                        "name":"auth",
+                        "in":"header",
+                        "description":"Authorization token",
+                        "required": true,
+                        "schema":{
+                          "type":"string"
+                        }
+                    },
+                    {
+                      "name":"filter",
+                      "in":"header",
+                      "description":"Field to filter the task list",
+                      "required": false,
+                      "schema":{
+                        "type":"boolean"
+                      }
+                  }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "400": {
+                        "description": "Invalid Task supplied"
+                    },
+                    "404": {
+                        "description": "Task not found"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "tasks"
+                ],
+                "summary": "Add a new task",
+                "description": "Add a new task",
+                "operationId": "addTask",
+                "requestBody": {
+                    "description": "Create a new task",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Tasks"
+                            }
+                        },
+                        "application/xml": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Tasks"
+                            }
+                        },
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Tasks"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "parameters": [
+                    {
+                        "name": "title",
+                        "in": "path",
+                        "description": "Title of task",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "description",
+                        "in": "path",
+                        "description": "Description of task",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                      "name":"auth",
+                      "in":"header",
+                      "description":"Authorization token",
+                      "required": true,
+                      "schema":{
+                        "type":"string"
+                      }
+                  }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Tasks"
+                                }
+                            },
+                            "application/xml": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Tasks"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid input"
+                    },
+                    "422": {
+                        "description": "Validation exception"
+                    }
+                },
+                "security": [
+                    {
+                        "tasks_auth": [
+                            "write:tasks",
+                            "read:tasks"
+                        ]
+                    }
+                ]
+            }
+        },
+        "/tasks/":{
+            "get":{
+                "tags":["tasks"],
+                "summary":"Get a task by id",
+                "description":"Get a task by id",
+                "operationId":"getTaskById",
+                "parameters":[
+                    {
+                        "name":"id",
+                        "in": "query",
+                        "description": "ID of task to return",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                      "name":"auth",
+                      "in":"header",
+                      "description":"Authorization token",
+                      "required": true,
+                      "schema":{
+                        "type":"string"
+                      }
+                  }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Tasks"
+                                }
+                            },
+                            "application/xml": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Tasks"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid ID supplied"
+                    },
+                    "404": {
+                        "description": "Task not found"
+                    }
+                }
+            },
+            "put": {
+                "tags": ["tasks"],
+                "summary": "Update an existing task",
+                "description": "Update an existing task by Id",
+                "operationId": "updateTask",
+                "requestBody": {
+                    "description": "Update an existent task",
+                    "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/UpdateTask"
+                        }
+                    },
+                    "application/xml": {
+                        "schema": {
+                            "$ref": "#/components/schemas/UpdateTask"
+                        }
+                    },
+                    "application/x-www-form-urlencoded": {
+                        "schema": {
+                            "$ref": "#/components/schemas/UpdateTask"
+                        }
+                    }
+                    },
+                    "required": true
+                },
+                "parameters":[
+                    {
+                      "name":"auth",
+                      "in":"header",
+                      "description":"Authorization token",
+                      "required": true,
+                      "schema":{
+                        "type":"string"
+                      }
+                    },
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "id of task",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "title",
+                        "in": "path",
+                        "description": "Title of task",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "description",
+                        "in": "path",
+                        "description": "Description of task",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "completed",
+                        "in": "path",
+                        "description": "status of task",
+                        "required": false,
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Tasks"
+                                }
+                            },
+                            "application/xml": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Tasks"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid ID supplied"
+                    },
+                    "404": {
+                        "description": "Task not found"
+                    },
+                    "422": {
+                        "description": "Validation exception"
+                    }
+                },
+                "security": [
+                    {
+                        "tasks_auth": [
+                            "write:tasks",
+                            "read:tasks"
+                        ]
+                    }
+                ]
+            },
+            "delete":{
+                "tags": ["tasks"],
+                "summary": "Delete a task",
+                "description": "delete a task by id",
+                "operationId": "deleteTask",
+                "parameters": [
+                    {
+                      "name":"auth",
+                      "in":"header",
+                      "description":"Authorization token",
+                      "required": true,
+                      "schema":{
+                        "type":"string"
+                      }
+                    },
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "Task id to delete",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200":{
+                        "description":"Task deleted successful",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/GeneralResponse"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid task value",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/GeneralResponse"
+                                }
+                            }
+                        }
+                    },
+                    "404":{
+                        "description": "Task not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/GeneralResponse"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "task_auth": [
+                            "write:tasks",
+                            "read:tasks"
+                        ]
+                    }
+                ]
+            }
+        },
+      "/users/get-token": {
+        "get": {
+          "tags": ["user"],
+          "summary": "Generate Token",
+          "description": "Generate a new token.",
+          "responses": {
+            "default": {
+              "description": "successful operation",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/User"
+                  }
+                },
+                "application/xml": {
+                  "schema": {
+                    "$ref": "#/components/schemas/User"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "components": {
+      "schemas": {
+        "User": {
+          "type": "object",
+          "properties": {
+            "error": {
+              "type": "boolean",
+              "example": false
+            },
+            "message": {
+              "type": "string",
+              "example": "Successful operation"
+            },
+            "result": {
+              "type": "object"
+            }
+          },
+          "xml": {
+            "name": "user"
+          }
+        },
+        "Tag": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "name": {
+              "type": "string"
+            }
+          },
+          "xml": {
+            "name": "tag"
+          }
+        },
+        "Tasks": {
+            "required": ["title"],
+            "type": "object",
+            "properties": {
+                "title": {
+                    "type": "string",
+                    "example": "New Task"
+                },
+                "description": {
+                    "type": "string",
+                    "description": "task description"
+                }
+            }
+        },
+        "UpdateTask": {
+            "type": "object",
+            "properties": {
+                "title": {
+                    "type": "string",
+                    "example": "New Task"
+                },
+                "description": {
+                    "type": "string",
+                    "description": "task description"
+                },
+                "completed":{
+                    "type":"boolean",
+                    "description": "status about task"
+                }
+            }
+        },
+        "GeneralResponse": {
+            "type":"object",
+            "properties":{
+                "error":{
+                    "type": "boolean"
+                },
+                "message":{
+                    "type": "string"
+                }
+            }
+        },
+        "ApiResponse": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "type": {
+                    "type": "string"
+                },
+                "message": {
+                    "type": "string"
+                }
+            },
+            "xml": {
+                "name": "##default"
+            }
+        }
+      }
+    }
+  }
